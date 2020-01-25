@@ -37,7 +37,9 @@ void setup() {
   textAlign(LEFT, CENTER);
 
   cp5 = new ControlP5(this);
-
+  controllerLayout();
+ 
+  
   //UDP setup using default handler receive
   udp = new UDP(this, 9000);
   udp.log(false);
@@ -52,7 +54,7 @@ void setup() {
   byte[] byteBuffer = "command".getBytes();
   udp.send(byteBuffer, ip, port );   // the message to send
 
-  controllerLayout();
+  
 }
 
 void draw() {

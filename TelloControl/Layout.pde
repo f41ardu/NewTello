@@ -5,16 +5,17 @@
 void controllerLayout() {
   cp5.addButton("command")
     .setPosition(50, 50)
-    .setSize(100, 80);
+    .setSize(80, 80)
+    ;
 
   cp5.addButton("takeoff")
     .setPosition(50, 150)
-    .setSize(100, 80)
+    .setSize(80, 80)
     ; 
 
    cp5.addButton("land")
    .setPosition(50, 250)
-   .setSize(100,80)
+   .setSize(80,80)
    ;
 /*   
    cp5.addButton("Backward")

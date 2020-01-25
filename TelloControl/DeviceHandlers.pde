@@ -44,5 +44,4 @@ void mousePressed() {
 public void controlEvent(ControlEvent theEvent) {
   // println(theEvent.getController().getName());
   buttonValue = theEvent.getController().getName();
-  int n = 0;
 }
