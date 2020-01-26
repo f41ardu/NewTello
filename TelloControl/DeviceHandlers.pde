@@ -3,7 +3,7 @@
  MIT Lisence 
  Start new devlopment for Tello using Processing 
  Platform Raspberry PI 3+ 
- Version 1.0.0 (base for further development 
+ Version 1.0.1 (base for further development 
 */ 
 
 // all device handlers for UDP, mouse and controlP5 events
@@ -20,32 +20,6 @@ void receive( byte[] data ) {          // <-- default handler
   // Debug will be removed later
   receivedData = true;
   println();
-}
-
-// mouse 
-void mousePressed() {
-
-  { 
-    if ( mousePressed && mouseButton == ' ') {
-      if (input.length()>0) {
-        input = input.substring(0, input.length()-1);
-      }
-    } else if (mousePressed && mouseButton == ' ') {
-      input = "";
-    } else if (mousePressed && mouseButton != ' ') {
-      input = input + (key) ;
-    }
-
-    if (mousePressed && mouseButton == ' ') {
-      input = input.substring(0, input.length()-1);
-      input = input + ' ';
-    }  
-    if (mousePressed && mouseButton == ' ') {
-
-      output = input = input.substring(0, input.length()-1);
-      input = "";
-    }
-  }
 }
 
 // controlP5
