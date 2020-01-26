@@ -3,17 +3,21 @@
  MIT Lisence 
  Start new devlopment for Tello using Processing 
  Platform Raspberry PI 3+ 
- Version 1.0.0 base for further development
+ Version 1.1.0 base for further development
 */ 
 
 import controlP5.*;
 import hypermedia.net.*;
+import gohai.glvideo.*; 
 
+// define control objects
 ControlP5 cp5; 
 Toggle takeoff,video;
 Slider2D slider1, slider2; 
 
-UDP udp;
+UDP udp;       // define UDP object 
+GLVideo videostream; // define VIDEO object
+
 
 String ip = "192.168.10.1";
 int port =8889;
@@ -34,7 +38,7 @@ PFont font;
 
 void setup() {
 
-  size(800, 500);
+  size(800, 500 ,P3D);
 
   font = createFont("SansSerif.plain", 40);
   textFont(font, 20);
@@ -47,6 +51,11 @@ void setup() {
   udp = new UDP(this, 9000);
   udp.log(false);
   udp.listen(true);
+  
+  // we connect to Tello via this custom GStreamer pipeline
+  videostream = new GLVideo(this, "udpsrc port=11111 ! decodebin", GLVideo.NO_SYNC);
+  videostream.play();
+  frameRate(20); 
 
   // set tello into sdk mode 
   byte[] byteBuffer = "command".getBytes();
@@ -122,6 +131,12 @@ void draw() {
   // if mouse is released reset sliders
   slider1.setValue(0, 0);
   slider2.setValue(0, 0);
+  
+  if (videostream.available()) {
+    videostream.read();
+    //println(video.width()+":"+video.height());
+  }
+  image(videostream, 300, 5, 620/2, 480/2);
 }
 
 // might be not needed 
