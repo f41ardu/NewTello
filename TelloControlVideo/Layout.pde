@@ -33,7 +33,7 @@ void controllerLayout() {
      .setMode(ControlP5.SWITCH)
      .setColorBackground(color(0))
      .setSize(80,40)
-     .hide()
+//     .hide()
      ;
 
   slider1 = cp5.addSlider2D("Stick1")
