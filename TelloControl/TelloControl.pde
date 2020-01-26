@@ -3,7 +3,7 @@
  MIT Lisence 
  Start new devlopment for Tello using Processing 
  Platform Raspberry PI 3+ 
- Version 1.0.0 base for further development
+ Version 1.1.0 add datalogger
 */ 
 
 import controlP5.*;
@@ -13,15 +13,19 @@ ControlP5 cp5;
 Toggle takeoff,video;
 Slider2D slider1, slider2; 
 
-UDP udp;
+UDP udp, udpdata;
 
 String ip = "192.168.10.1";
-int port =8889;
+int port = 8889;
+String ip2 = "localhost";
+int port2 = 8890;
 int start = 0;
 int time = 0; 
 
 String received ="";
+String myreceived ="";
 Boolean receivedData = false;
+Boolean myreceivedData = false;
 String input= "";
 String output = "";
 String buttonValue="";
@@ -44,9 +48,14 @@ void setup() {
   controllerLayout();
  
   //UDP setup using default handler receive
-  udp = new UDP(this, 9000);
+  udp = new UDP(this, port);
   udp.log(false);
   udp.listen(true);
+  //UDP setup using default handler receive
+  udpdata = new UDP(this, port2);
+  udpdata.setReceiveHandler("MYreceive"); 
+  udpdata.log(true);
+  udpdata.listen(true);
 
   // set tello into sdk mode 
   byte[] byteBuffer = "command".getBytes();
@@ -63,6 +72,7 @@ void draw() {
   text("DJI Tello Control V1.0", 50, 30);
   // show what Tello tell us 
   text("Received:" + received, 50, 70);
+  text("DataLogger:" + myreceived, 50, 190);
   // show time 
   int m = (millis()-start)/1000;
   text("Time:" +  m, 50, 110);
@@ -71,7 +81,7 @@ void draw() {
     text("Send:" + buttonValue, 50, 140);
   }
   if (buttonValue != "") {
-    if (debug) println(buttonValue); 
+    //println(buttonValue); 
     sendData(buttonValue); 
     buttonValue="";
   }
@@ -124,9 +134,8 @@ void draw() {
   slider2.setValue(0, 0);
 }
 
-// might be not needed 
 void sendData(String inputData) {
-  if (input != "") {
+  if (inputData != "") {
     if (debug) println(inputData);
     // udp send require byteArray
     byte[] byteBuffer = inputData.getBytes();
