@@ -1,3 +1,11 @@
+/* 
+ (c) 01/2020 f41ardu
+ MIT Lisence 
+ Start new devlopment for Tello using Processing 
+ Platform Raspberry PI 3+ 
+ Version 1.0.0 (base for further development 
+*/ 
+
 // all device handlers for UDP, mouse and controlP5 events
 
 // udp
@@ -43,5 +51,6 @@ void mousePressed() {
 // controlP5
 public void controlEvent(ControlEvent theEvent) {
   // println(theEvent.getController().getName());
-  buttonValue = theEvent.getController().getName();
+  //buttonValue = theEvent.getController().getName();
+  buttonValue = theEvent.getController().getStringValue(); 
 }

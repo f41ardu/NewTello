@@ -3,12 +3,14 @@
  MIT Lisence 
  Start new devlopment for Tello using Processing 
  Platform Raspberry PI 3+ 
+ Version 1.0.0 base for further development
 */ 
 
 import controlP5.*;
 import hypermedia.net.*;
 
 ControlP5 cp5; 
+Toggle takeoff,video;
 Slider2D slider1, slider2; 
 
 UDP udp;
@@ -24,6 +26,8 @@ String input= "";
 String output = "";
 String buttonValue="";
 String controllCommand="";
+boolean toggleValue = false;
+boolean toggleStart = false; 
 boolean debug = false; 
 
 PFont font;
@@ -39,16 +43,10 @@ void setup() {
   cp5 = new ControlP5(this);
   controllerLayout();
  
-  
   //UDP setup using default handler receive
   udp = new UDP(this, 9000);
   udp.log(false);
   udp.listen(true);
-
-  // https://stackoverflow.com/questions/58980573/how-to-implement-rc-command-on-virtual-joystick
-  // Now for the continuous control over the aircraft you need 
-  // to send the virtualStickData with at least 5 Hz.
-  //frameRate(10); 
 
   // set tello into sdk mode 
   byte[] byteBuffer = "command".getBytes();
@@ -62,16 +60,41 @@ void draw() {
 
   fill(0, 250, 0);
 
-  text("DJI Tello Control", 150, 30);
+  text("DJI Tello Control V1.0", 50, 30);
   // show what Tello tell us 
-  text("Received:" + received, 150, 70);
+  text("Received:" + received, 50, 70);
   // show time 
   int m = (millis()-start)/1000;
-  text("Time:" +  m, 150, 110);
-  if (buttonValue != "Stick1" && buttonValue != "Stick2") {
+  text("Time:" +  m, 50, 110);
+  text("Send:               " , 50, 140);
+  if (buttonValue != "") {
+    text("Send:" + buttonValue, 50, 140);
+  }
+  if (buttonValue != "") {
     if (debug) println(buttonValue); 
     sendData(buttonValue); 
     buttonValue="";
+  }
+  
+   toggleValue = video.getBooleanValue();
+   if(toggleValue==true) {
+    if (debug) println("Toggle On"); 
+    video.setStringValue("Streamon"); 
+    video.setColorActive(color(255,0, 0)); 
+  } else {
+    if (debug) println("Toggle Off"); 
+    video.setStringValue("Streamoff");
+    video.setColorActive(color(0,255,0)); 
+  }
+   toggleStart = takeoff.getBooleanValue();
+   if(toggleStart==true) {
+    if (debug) println("takeoff"); 
+    takeoff.setStringValue("takeoff"); 
+    takeoff.setColorActive(color(255,0, 0)); 
+  } else {
+    if (debug) println("land"); 
+    takeoff.setStringValue("land");
+    takeoff.setColorActive(color(0,255,0)); 
   }
 
   // a: left/right (-100~100)
@@ -84,9 +107,9 @@ void draw() {
   int d = int(slider1.getArrayValue()[0]);
   //println(a+" "+b+" "+c+" "+d);
   controllCommand = "rc "+a+" "+b+" "+c+" "+d; 
-  // println(controllCommand);
-  // here send rc command every 500 ms
-  if (millis() > time + 40)
+  if (debug) println(controllCommand);
+  // here we send rc command every 100 ms
+  if (millis() > time + 50)
   {
     if (debug) {
       println("we send");
@@ -103,19 +126,10 @@ void draw() {
 
 // might be not needed 
 void sendData(String inputData) {
-  if (input != "") { 
+  if (input != "") {
+    if (debug) println(inputData);
     // udp send require byteArray
     byte[] byteBuffer = inputData.getBytes();
     udp.send(byteBuffer, ip, port );   // the message to send
   }
-}
-
-
-void toggle(boolean theFlag) {
-  if (theFlag==true) {
-    int s = 5;
-  } else {
-    int s = 6;
-  }
-  println("a toggle event.");
 }
