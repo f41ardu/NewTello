@@ -14,6 +14,7 @@ Toggle takeoff,video;
 Slider2D slider1, slider2; 
 
 UDP udp, udpdata;
+// pitch:-5;roll:12;yaw:0;vgx:0;vgy:0;vgz:0;templ:50;temph:52;tof:10;h:0;bat:74;baro:441.74;time:0;agx:-98.00;agy:-208.00;agz:-976.00;
 
 String ip = "192.168.10.1";
 int port = 8889;
